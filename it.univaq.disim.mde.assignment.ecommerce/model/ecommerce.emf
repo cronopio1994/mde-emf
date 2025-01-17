@@ -1,0 +1,117 @@
+@"http://www.eclipse.org/OCL/Import"(ecore="http://www.eclipse.org/emf/2002/Ecore")
+@Ecore(invocationDelegates="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot", settingDelegates="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot", validationDelegates="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot")
+@namespace(uri="http://www.example.org/ecommerce", prefix="ecommerce")
+package ecommerce;
+
+abstract class ID_Element {
+	attr int[1] ID;
+}
+
+@Ecore(constraints="positivePrice")
+@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(positivePrice="self.price > 0")
+abstract class Item extends ID_Element {
+	attr String name;
+	attr float[1] price;
+}
+
+class Product extends Item {
+	attr String category;
+}
+
+class Cart extends ID_Element {
+
+	@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(body="self.products->size()")
+	op int[1] totalProducts();
+	ref Product[*] products;
+}
+
+class OrderItem {
+	attr int[1] quantity;
+	attr float[1] unitPrice;
+	val Product[1] product;
+}
+
+class ShippingMethod {
+	attr String name;
+	attr EDate deliveryTime;
+	attr float[1] cost;
+}
+
+@Ecore(constraints="validTotalAmount")
+@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(validTotalAmount="
+            self.totalAmmount = self.orderitem->iterate(o : OrderItem; sum : ecore::EFloat = 0 | sum + (o.unitPrice * o.quantity))")
+class Order extends ID_Element {
+
+	@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(body="if self.discount.oclIsUndefined() then
+                      self.totalAmmount
+                  else
+                      self.totalAmmount - self.discount.ammount
+                  endif")
+	op float[1] discountedTotal();
+	attr EDate date;
+	attr OrderStatus status;
+	attr float[1] totalAmmount;
+
+	@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(derivation="self.totalAmmount * 0.1")
+	attr float[1] taxAmmount;
+	val ShippingMethod shippingmethod;
+	ref Discount discount;
+	val Payment[+] payment;
+	val OrderItem[+] orderitem;
+
+	@"http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"(derivation="self.orderitem->iterate(o : OrderItem; sum : ecore::EInt = 0 | sum + o.quantity)")
+	attr int[1] totalQuantity;
+}
+
+class Discount {
+	attr String type;
+	attr int[1] ammount;
+	attr String description;
+}
+
+enum PaymentStatus {
+	paid = 0;
+	pending = 1;
+	refunded = 2;
+}
+
+enum OrderStatus {
+	pending = 0;
+	shipped = 1;
+	delivered = 2;
+	cancelled = 3;
+}
+
+enum PaymentType {
+	creditCard = 0;
+	paypal = 1;
+}
+
+class PaymentMethod {
+	attr PaymentType type;
+	attr String description;
+}
+
+class Payment extends ID_Element {
+	attr float[1] ammount;
+	attr EDate paymentDate;
+	val PaymentMethod[1] paymentmethod;
+	ref Order[1] order;
+}
+
+class Customer extends ID_Element {
+	attr String name;
+	attr String email;
+	attr String phoneNumber;
+	val Cart[1] cart;
+	val Order[*] order;
+	val Address[1] address;
+}
+
+class Address {
+	attr String street;
+	attr String city;
+	attr String state;
+	attr String country;
+}
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecommerce:Discount
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:ecommerce="http://www.example.org/ecommerce"
+    type="Winter sale"
+    ammount="10"
+    description="Winter sale"/>

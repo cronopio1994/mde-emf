@@ -1,0 +1,53 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.example.org/ecommerce')]
+
+[template public generateElement(aCustomer : Customer)]
+[comment @main/]
+[file ('Customer.html', false, 'UTF-8')]
+<html>
+	<style>
+	table, th, td {
+	  border:1px solid black;
+	}
+	</style>
+  <head>
+    <title>Customer Index</title>
+  </head>
+  <body>
+	
+	<h1>E-commerce</h1>
+	Customer name: [aCustomer.name/]<br>
+	Phone number: [aCustomer.phoneNumber/]<br>
+	Email: [aCustomer.email/]<br>
+	Address: [aCustomer.address.street/], [aCustomer.address.city/], [aCustomer.address.state/], [aCustomer.address.country/]<br>
+
+	<h4>Orders:</h4>
+	<p> Date: [aCustomer.order.date/] </p>
+	<h4>Products</h4>
+		<table>
+			<tr>
+				<th>Category</th>
+				<th>Product</th>
+				<th>Price</th>
+			</tr>
+	[for(att : OrderItem | aCustomer.order.orderitem )]
+			<tr>
+				<td>[att.product.category/]</td>
+				<td>[att.product.name/]</td>
+				<td>[att.product.price/]</td>
+			</tr>
+	[/for]
+		</table>
+		<br>
+	<h4>Shipping Method:</h4>
+	Name: [aCustomer.order.shippingmethod.name/]<br>
+	Cost: [aCustomer.order.shippingmethod.cost/]<br>
+
+	<h4>Payment:</h4>
+	Ammount: [aCustomer.order.payment.ammount/]<br>
+	Date: [aCustomer.order.payment.paymentDate/]<br>
+
+	</body>
+</html>
+[/file]
+[/template]

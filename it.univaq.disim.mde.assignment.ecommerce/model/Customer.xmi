@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecommerce:Customer
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:ecommerce="http://www.example.org/ecommerce"
+    ID="1" name="John Doe"
+    email="j@mail.com"
+    phoneNumber="123456789">
+  <order date="2024-11-09T00:00:00.000+0200"
+      totalAmmount="10.0"
+      taxAmmount="0.0"
+      totalQuantity="10">
+    <shippingmethod
+        name="Courier"
+        cost="10.0"/>
+    <payment
+        ammount="10.0"
+        paymentDate="2024-11-09T00:00:00.000+0200"
+        order="//@order.0"/>
+    <orderitem
+        quantity="1"
+        unitPrice="10.0">
+      <product
+          name="t-shirt"
+          price="10.0"
+          category="Clothing"/>
+    </orderitem>
+    <orderitem
+        quantity="1"
+        unitPrice="100.0">
+      <product
+          name="Nike"
+          price="100.0"
+          category="Shoes"/>
+    </orderitem>
+  </order>
+  <address street="Ugo Piccinini"
+      city="L'Aquila"
+      state="L'Aquila"
+      country="Italy"/>
+</ecommerce:Customer>

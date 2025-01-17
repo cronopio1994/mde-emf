@@ -1,0 +1,20 @@
+-- @path ECOMMERCEREFINED=/it.univaq.disim.mde.assignment.ecommerce.refinement/model/refinement.ecore
+-- @path ECOMMERCE=/it.univaq.disim.mde.assignment.ecommerce/model/ecommerce.ecore
+
+module trafo;
+create OUT : ECOMMERCEREFINED from IN : ECOMMERCE;
+
+rule TransformProduct {
+    from
+        product : ECOMMERCE!Product
+    to
+        newCategory : ECOMMERCEREFINED!Category (
+            description <- product.category, -- Copy product name
+			name <- product.name
+        ),		
+		transformedProduct : ECOMMERCEREFINED!Product (
+			category <- newCategory,
+			name <- product.name,
+			price <- product.price
+		)
+}
